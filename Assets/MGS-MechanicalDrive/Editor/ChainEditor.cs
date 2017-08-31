@@ -175,5 +175,5 @@ namespace Developer.MechanicalDrive
             GUILayout.EndHorizontal();
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

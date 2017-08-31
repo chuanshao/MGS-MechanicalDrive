@@ -30,5 +30,5 @@ namespace Developer.MechanicalDrive
         /// </summary>
         public int ID;
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

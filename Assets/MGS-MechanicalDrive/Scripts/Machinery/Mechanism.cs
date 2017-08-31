@@ -49,5 +49,5 @@ namespace Developer.MechanicalDrive
         /// <param name="velocity">Linear velocity.</param>
         public abstract void Drive(float velocity);
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

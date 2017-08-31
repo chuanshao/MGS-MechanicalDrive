@@ -70,5 +70,5 @@ namespace Developer.MechanicalDrive
                 enabled = false;
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

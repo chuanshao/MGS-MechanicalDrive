@@ -58,5 +58,5 @@ namespace Developer.MechanicalDrive
             gear.transform.Rotate(Vector3.forward, wormSpeed * threads / teeth * Time.deltaTime, Space.Self);
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

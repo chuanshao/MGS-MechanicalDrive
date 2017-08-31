@@ -83,5 +83,5 @@ namespace Developer.MechanicalDrive
             transform.localPosition = startPosition + localAxis * currentOffset;
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

@@ -41,5 +41,5 @@ namespace Developer.MechanicalDrive
             transform.Rotate(Vector3.forward, velocity / radius * Time.deltaTime, Space.Self);
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

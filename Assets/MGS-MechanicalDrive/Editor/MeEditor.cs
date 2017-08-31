@@ -56,5 +56,5 @@ namespace Developer.MechanicalDrive
             DrawArrow(start, end, size, text, color);
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

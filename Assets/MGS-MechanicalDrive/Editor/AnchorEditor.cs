@@ -33,7 +33,7 @@ namespace Developer.MechanicalDrive
 
         protected static Chain targetChain;
         protected static Material material;
-        protected static string materialPath = "Assets/MGS-MechanicalDrive/Material/Blue_Mat.mat";
+        protected static string materialPath = "Assets/MGS-MechanicalDrive/Material/Anchor.mat";
 
         public static Transform center { protected set; get; }
         public static float radius { protected set; get; }
@@ -65,7 +65,7 @@ namespace Developer.MechanicalDrive
         #endregion
 
         #region Private Method
-        [MenuItem("Tool/AnchorEditor &A")]
+        [MenuItem("Tool/Anchor Editor &A")]
         private static void ShowEditor()
         {
             targetChain = GetChainFromSelection();
@@ -375,5 +375,5 @@ namespace Developer.MechanicalDrive
             ShowEditorWindow();
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

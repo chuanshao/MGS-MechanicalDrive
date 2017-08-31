@@ -49,5 +49,5 @@ namespace Developer.MechanicalDrive
             mRenderer.material.mainTextureOffset += new Vector2(velocity * Mathf.Deg2Rad * Time.deltaTime, 0);
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

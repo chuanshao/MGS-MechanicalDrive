@@ -55,5 +55,5 @@ namespace Developer.MechanicalDrive
             DrawArrow(startPosition, script.transform.position, nodeSize, string.Empty, blue);
             DrawArrow(startPosition, script.transform.forward, arrowLength, nodeSize, "Axis", blue);
         }
-    }//class_end
-}//namespace_end
+    }
+}

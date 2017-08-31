@@ -73,5 +73,5 @@ namespace Developer.MechanicalDrive
             transform.localPosition = startPosition + GetLocalDirection(direction) * amplitudeRadius;
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

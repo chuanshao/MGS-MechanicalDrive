@@ -57,5 +57,5 @@ namespace Developer.MechanicalDrive
             DrawArrow(startPosition, script.transform.forward, script.amplitudeRadius, nodeSize, string.Empty, blue);
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

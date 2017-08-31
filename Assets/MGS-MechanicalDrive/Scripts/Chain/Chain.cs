@@ -149,5 +149,5 @@ namespace Developer.MechanicalDrive
             }
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}

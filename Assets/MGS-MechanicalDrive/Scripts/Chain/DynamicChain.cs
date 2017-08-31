@@ -38,5 +38,5 @@ namespace Developer.MechanicalDrive
             base.Drive(velocity);
         }
         #endregion
-    }//class_end
-}//namespace_end
+    }
+}
