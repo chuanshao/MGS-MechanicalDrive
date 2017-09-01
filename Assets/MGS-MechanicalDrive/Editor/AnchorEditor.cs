@@ -27,19 +27,21 @@ namespace Developer.MechanicalDrive
     {
         #region Property and Field
         protected static AnchorEditor instance;
-        protected static Vector2 scrollPos;
-        protected static float leftAlign = 80;
         public static bool isOpen { protected set; get; }
+
+        protected static Vector2 scrollPos;
+        protected const float leftAlign = 150;
+        protected const float paragraph = 2.5f;
 
         protected static Chain targetChain;
         protected static Material material;
-        protected static string materialPath = "Assets/MGS-MechanicalDrive/Material/Anchor.mat";
+        protected const string materialPath = "Assets/MGS-MechanicalDrive/Material/Anchor.mat";
 
         public static Transform center { protected set; get; }
         public static float radius { protected set; get; }
         public static float from { protected set; get; }
         public static float to { protected set; get; }
-        public static float countC { protected set; get; }
+        public static int countC { protected set; get; }
         public static bool isCircularSettingsReasonable
         {
             get
@@ -50,7 +52,7 @@ namespace Developer.MechanicalDrive
 
         public static Transform start { protected set; get; }
         public static Transform end { protected set; get; }
-        public static float countL { protected set; get; }
+        public static int countL { protected set; get; }
         public static bool isLinearSettingsReasonable
         {
             get
@@ -60,7 +62,7 @@ namespace Developer.MechanicalDrive
         }
 
         protected static string prefix = "Anchor";
-        protected static string rendererName = "AnchorRenderer";
+        protected const string rendererName = "AnchorRenderer";
         protected static float size = 0.05f;
         #endregion
 
@@ -110,120 +112,78 @@ namespace Developer.MechanicalDrive
 
                     #region Circular Anchor Creater
                     GUILayout.BeginVertical("Circular Anchor Creater", "Window", GUILayout.Height(140));
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("Center", GUILayout.Width(leftAlign));
+
                     EditorGUI.BeginChangeCheck();
-                    center = (Transform)EditorGUILayout.ObjectField(center, typeof(Transform), true);
+                    center = (Transform)EditorGUILayout.ObjectField("Center", center, typeof(Transform), true);
+                    radius = EditorGUILayout.FloatField("Radius", radius);
+                    from = EditorGUILayout.FloatField("From", from);
+                    to = EditorGUILayout.FloatField("To", to);
+                    countC = EditorGUILayout.IntField("Count", countC);
                     if (EditorGUI.EndChangeCheck())
                         ActiveSceneWindow();
-                    GUILayout.EndHorizontal();
 
                     GUILayout.BeginHorizontal();
-                    GUILayout.Label("Radius", GUILayout.Width(leftAlign));
-                    radius = EditorGUILayout.FloatField(radius);
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("From", GUILayout.Width(leftAlign));
-                    from = EditorGUILayout.FloatField(from);
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("To", GUILayout.Width(leftAlign));
-                    to = EditorGUILayout.FloatField(to);
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("Count", GUILayout.Width(leftAlign));
-                    countC = EditorGUILayout.FloatField(countC);
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Space(leftAlign + 5);
-                    if (GUILayout.Button("Reset"))
-                    {
-                        center = null;
-                        radius = from = to = countC = 0;
-                        ActiveSceneWindow();
-                    }
+                    GUILayout.Space(leftAlign);
                     if (GUILayout.Button("Create"))
                     {
                         if (isCircularSettingsReasonable)
                             CreateCircularAnchors();
                         else
-                            Debug.LogError("The parameter settings of circular anchor creater is not reasonable.");
+                            ShowNotification(new GUIContent("The parameter settings of circular anchor creater is not reasonable."));
                     }
+                    if (GUILayout.Button("Reset"))
+                        ResetCircularAnchorCreater();
                     GUILayout.EndHorizontal();
+
                     GUILayout.EndVertical();
                     #endregion
 
                     #region Linear Anchor Creater
                     GUILayout.BeginVertical("Linear Anchor Creater", "Window", GUILayout.Height(105));
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("Start", GUILayout.Width(leftAlign));
-                    EditorGUI.BeginChangeCheck();
-                    start = (Transform)EditorGUILayout.ObjectField(start, typeof(Transform), true);
-                    GUILayout.EndHorizontal();
 
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("End", GUILayout.Width(leftAlign));
-                    end = (Transform)EditorGUILayout.ObjectField(end, typeof(Transform), true);
+                    EditorGUI.BeginChangeCheck();
+                    start = (Transform)EditorGUILayout.ObjectField("Start", start, typeof(Transform), true);
+                    end = (Transform)EditorGUILayout.ObjectField("End", end, typeof(Transform), true);
+                    countL = EditorGUILayout.IntField("Count", countL);
                     if (EditorGUI.EndChangeCheck())
                         ActiveSceneWindow();
-                    GUILayout.EndHorizontal();
 
                     GUILayout.BeginHorizontal();
-                    GUILayout.Label("Count", GUILayout.Width(leftAlign));
-                    countL = EditorGUILayout.FloatField(countL);
-                    GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Space(leftAlign + 5);
-                    if (GUILayout.Button("Reset"))
-                    {
-                        start = end = null;
-                        countL = 0;
-                        ActiveSceneWindow();
-                    }
+                    GUILayout.Space(leftAlign);
                     if (GUILayout.Button("Create"))
                     {
                         if (isLinearSettingsReasonable)
                             CreateLinearAnchors();
                         else
-                            Debug.LogError("The parameter settings of linear anchor creater is not reasonable.");
+                            ShowNotification(new GUIContent("The parameter settings of linear anchor creater is not reasonable."));
                     }
+                    if (GUILayout.Button("Reset"))
+                        ResetLinearAnchorCreater();
                     GUILayout.EndHorizontal();
+
                     GUILayout.EndVertical();
                     #endregion
 
                     #region Unified Anchor Manager
-                    GUILayout.BeginVertical("Unified Anchor Manager", "Window");
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("Prefix", GUILayout.Width(leftAlign));
-                    prefix = EditorGUILayout.TextField(prefix);
-                    GUILayout.EndHorizontal();
+                    GUILayout.BeginVertical("Unify Anchor Manager", "Window");
+                    prefix = EditorGUILayout.TextField("Prefix", prefix);
 
                     GUILayout.BeginHorizontal();
-                    GUILayout.Space(leftAlign + 5);
-                    if (GUILayout.Button("Reset"))
-                        prefix = "Anchor";
+                    GUILayout.Space(leftAlign);
                     if (GUILayout.Button("Rename"))
                     {
                         if (prefix.Trim() == string.Empty)
-                            Debug.LogError("The value of prefix cannot be empty.");
+                            ShowNotification(new GUIContent("The value of prefix cannot be empty."));
                         else
                             RenameAnchors();
                     }
                     GUILayout.EndHorizontal();
 
-                    GUILayout.Space(2.5f);
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("Renderer", GUILayout.Width(leftAlign));
-                    size = EditorGUILayout.FloatField(size);
-                    GUILayout.EndHorizontal();
+                    GUILayout.Space(paragraph);
+                    size = EditorGUILayout.FloatField("Renderer", size);
 
                     GUILayout.BeginHorizontal();
-                    GUILayout.Space(leftAlign + 5);
+                    GUILayout.Space(leftAlign);
                     if (GUILayout.Button("Attach"))
                     {
                         RemoveAnchorRenderer();
@@ -233,21 +193,21 @@ namespace Developer.MechanicalDrive
                         RemoveAnchorRenderer();
                     GUILayout.EndHorizontal();
 
-                    GUILayout.Space(2.5f);
+                    GUILayout.Space(paragraph);
                     GUILayout.BeginHorizontal();
-                    GUILayout.Label("Anchors", GUILayout.Width(leftAlign));
+                    GUILayout.Label("Anchors", GUILayout.Width(leftAlign - 4));
                     if (GUILayout.Button("Delete"))
                     {
                         var delete = EditorUtility.DisplayDialog(
-                            "Delete Anchors",
-                            "This operate will delete all of the chain anchors.\nAre you sure continue to do this?",
-                            "Yes",
-                            "Cancel"
-                            );
+                         "Delete Anchors",
+                         "This operate will delete all of the chain anchors.\nAre you sure continue to do this?",
+                         "Yes",
+                         "Cancel");
                         if (delete)
                             DeleteAnchors();
                     }
                     GUILayout.EndHorizontal();
+
                     GUILayout.EndVertical();
                     #endregion
 
@@ -282,9 +242,16 @@ namespace Developer.MechanicalDrive
                 var position = center.position + direction * radius;
                 CreateAnchor("CircularAnchor" + " (" + i + ")", position, position + tangent, direction, center.GetSiblingIndex());
             }
-            center = null;
+            ResetCircularAnchorCreater();
             RefreshChainCurve();
             EditorSceneManager.MarkAllScenesDirty();
+        }
+
+        protected void ResetCircularAnchorCreater()
+        {
+            center = null;
+            radius = from = to = countC = 0;
+            ActiveSceneWindow();
         }
 
         protected void CreateLinearAnchors()
@@ -296,9 +263,16 @@ namespace Developer.MechanicalDrive
                 CreateAnchor("LinearAnchor" + " (" + i + ")", start.position + direction * space * (i + 1),
                     end.position, Vector3.Cross(direction, targetChain.anchorRoot.forward), end.GetSiblingIndex());
             }
-            start = end = null;
+            ResetLinearAnchorCreater();
             RefreshChainCurve();
             EditorSceneManager.MarkAllScenesDirty();
+        }
+
+        protected void ResetLinearAnchorCreater()
+        {
+            start = end = null;
+            countL = 0;
+            ActiveSceneWindow();
         }
 
         protected void CreateAnchor(string anchorName, Vector3 position, Vector3 lookAtPos, Vector3 worldUp, int siblingIndex)
