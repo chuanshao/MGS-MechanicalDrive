@@ -1,27 +1,20 @@
 /*************************************************************************
- *  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
- *  FileName: Chain.cs
- *  Author: Mogoson   Version: 1.0   Date: 6/21/2017
- *  Version Description:
- *    Internal develop version,mainly to achieve its function.
- *  File Description:
- *    Ignore.
- *  Class List:
- *    <ID>           <name>             <description>
- *     1.            Chain                 Ignore.
- *  Function List:
- *    <class ID>     <name>             <description>
- *     1.
- *  History:
- *    <ID>    <author>      <time>      <version>      <description>
- *     1.     Mogoson     6/21/2017       1.0        Build this file.
+ *  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
+ *------------------------------------------------------------------------
+ *  File         :  Chain.cs
+ *  Description  :  Define Chain component.
+ *------------------------------------------------------------------------
+ *  Author       :  Mogoson
+ *  Version      :  0.1.0
+ *  Date         :  6/21/2017
+ *  Description  :  Initial development version.
  *************************************************************************/
+
+using Developer.AnimationCurveExtension;
+using UnityEngine;
 
 namespace Developer.MechanicalDrive
 {
-    using AnimationCurve;
-    using UnityEngine;
-
     [AddComponentMenu("Developer/MechanicalDrive/Chain")]
     public class Chain : Mechanism
     {
@@ -66,6 +59,11 @@ namespace Developer.MechanicalDrive
         /// Timer for VectorAnimationCurve.
         /// </summary>
         protected float timer = 0;
+
+        /// <summary>
+        /// Delta time for VectorAnimationCurve
+        /// </summary>
+        protected const float delta = 0.01f;
         #endregion
 
         #region Private Method
@@ -83,12 +81,12 @@ namespace Developer.MechanicalDrive
         {
             //Calculate position and direction.
             var nodePos = curve.Evaluate(time);
-            var nextNodePos = curve.Evaluate(time + 0.01f);
-            var up = Vector3.Cross(nextNodePos - nodePos, transform.forward);
+            var deltaPos = curve.Evaluate(time + delta);
+            var up = Vector3.Cross(deltaPos - nodePos, transform.forward);
 
             //Update position and direction.
             node.localPosition = nodePos;
-            node.LookAt(nodeRoot.TransformPoint(nextNodePos), up);
+            node.LookAt(nodeRoot.TransformPoint(deltaPos), up);
         }
         #endregion
 
@@ -114,7 +112,7 @@ namespace Developer.MechanicalDrive
             time += Vector3.Distance(anchorRoot.GetChild(anchorRoot.childCount - 1).position, anchorRoot.GetChild(0).position);
             curve.AddKey(time, anchorRoot.GetChild(0).localPosition);
 
-            //Smooth curve keys out tangent.
+            //Smooth the in and out tangents of curve keyframes.
             curve.SmoothTangents(0);
         }
 
@@ -127,7 +125,10 @@ namespace Developer.MechanicalDrive
             for (int i = 0; i < count; i++)
             {
                 //Create node.
-                var nodeClone = (GameObject)Instantiate(nodePrefab, nodeRoot);
+                var nodeClone = Instantiate(nodePrefab);
+                nodeClone.transform.SetParent(nodeRoot);
+
+                //Tow node.
                 TowNodeBaseOnCurve(nodeClone.transform, i * space);
 
                 //Set node ID.

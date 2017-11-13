@@ -1,26 +1,19 @@
 /*************************************************************************
- *  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
- *  FileName: LinearVibrator.cs
- *  Author: Mogoson   Version: 1.0   Date: 6/24/2017
- *  Version Description:
- *    Internal develop version,mainly to achieve its function.
- *  File Description:
- *    Ignore.
- *  Class List:
- *    <ID>           <name>             <description>
- *     1.        LinearVibrator            Ignore.
- *  Function List:
- *    <class ID>     <name>             <description>
- *     1.
- *  History:
- *    <ID>    <author>      <time>      <version>      <description>
- *     1.     Mogoson     6/24/2017       1.0        Build this file.
+ *  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
+ *------------------------------------------------------------------------
+ *  File         :  LinearVibrator.cs
+ *  Description  :  Define LinearVibrator component.
+ *------------------------------------------------------------------------
+ *  Author       :  Mogoson
+ *  Version      :  0.1.0
+ *  Date         :  6/24/2017
+ *  Description  :  Initial development version.
  *************************************************************************/
+
+using UnityEngine;
 
 namespace Developer.MechanicalDrive
 {
-    using UnityEngine;
-
     [AddComponentMenu("Developer/MechanicalDrive/LinearVibrator")]
     public class LinearVibrator : Mechanism
     {

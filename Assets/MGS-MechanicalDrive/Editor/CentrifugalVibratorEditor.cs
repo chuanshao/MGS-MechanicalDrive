@@ -1,33 +1,27 @@
 /*************************************************************************
- *  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
- *  FileName: CentrifugalVibratorEditor.cs
- *  Author: Mogoson   Version: 1.0   Date: 6/24/2017
- *  Version Description:
- *    Internal develop version,mainly to achieve its function.
- *  File Description:
- *    Ignore.
- *  Class List:
- *    <ID>           <name>             <description>
- *     1.   CentrifugalVibratorEditor      Ignore.
- *  Function List:
- *    <class ID>     <name>             <description>
- *     1.
- *  History:
- *    <ID>    <author>      <time>      <version>      <description>
- *     1.     Mogoson     6/24/2017       1.0        Build this file.
+ *  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
+ *------------------------------------------------------------------------
+ *  File         :  CentrifugalVibratorEditor.cs
+ *  Description  :  Custom editor for CentrifugalVibrator.
+ *------------------------------------------------------------------------
+ *  Author       :  Mogoson
+ *  Version      :  0.1.0
+ *  Date         :  6/24/2017
+ *  Description  :  Initial development version.
  *************************************************************************/
+
+using UnityEditor;
+using UnityEngine;
 
 namespace Developer.MechanicalDrive
 {
-    using UnityEditor;
-    using UnityEngine;
-
     [CustomEditor(typeof(CentrifugalVibrator), true)]
     [CanEditMultipleObjects]
-    public class CentrifugalVibratorEditor : MeEditor
+    public class CentrifugalVibratorEditor : MechanismEditor
     {
         #region Property and Field
         protected CentrifugalVibrator script { get { return target as CentrifugalVibrator; } }
+
         protected Vector3 startPosition
         {
             get
@@ -48,9 +42,10 @@ namespace Developer.MechanicalDrive
         protected virtual void OnSceneGUI()
         {
             Handles.color = blue;
-            Handles.SphereCap(0, startPosition, Quaternion.identity, nodeSize);
-            Handles.SphereCap(0, script.transform.position, Quaternion.identity, nodeSize);
-            Handles.CircleCap(0, startPosition, script.transform.rotation, script.amplitudeRadius);
+
+            DrawSphereCap(startPosition, Quaternion.identity, nodeSize);
+            DrawSphereCap(script.transform.position, Quaternion.identity, nodeSize);
+            DrawCircleCap(startPosition, script.transform.rotation, script.amplitudeRadius);
 
             DrawArrow(startPosition, script.transform.position, nodeSize, string.Empty, blue);
             DrawArrow(startPosition, script.transform.forward, arrowLength, nodeSize, "Axis", blue);

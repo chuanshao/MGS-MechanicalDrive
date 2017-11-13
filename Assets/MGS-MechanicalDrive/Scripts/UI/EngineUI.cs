@@ -1,33 +1,27 @@
 /*************************************************************************
- *  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
- *  FileName: EngineUI.cs
- *  Author: Mogoson   Version: 1.0   Date: 6/24/2017
- *  Version Description:
- *    Internal develop version,mainly to achieve its function.
- *  File Description:
- *    Ignore.
- *  Class List:
- *    <ID>           <name>             <description>
- *     1.           EngineUI               Ignore.
- *  Function List:
- *    <class ID>     <name>             <description>
- *     1.
- *  History:
- *    <ID>    <author>      <time>      <version>      <description>
- *     1.     Mogoson     6/24/2017       1.0        Build this file.
+ *  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
+ *------------------------------------------------------------------------
+ *  File         :  EngineUI.cs
+ *  Description  :  Draw scene UI to control Engine.
+ *------------------------------------------------------------------------
+ *  Author       :  Mogoson
+ *  Version      :  0.1.0
+ *  Date         :  6/24/2017
+ *  Description  :  Initial development version.
  *************************************************************************/
+
+using UnityEngine;
 
 namespace Developer.MechanicalDrive
 {
-    using UnityEngine;
-
-    [RequireComponent(typeof(Engine))]
     [AddComponentMenu("Developer/MechanicalDrive/EngineUI")]
+    [RequireComponent(typeof(Engine))]
     public class EngineUI : MonoBehaviour
     {
         #region Property and Field
         public float xOfset = 10;
         public float yOfset = 10;
+
         protected Engine engine;
         #endregion
 
@@ -44,6 +38,7 @@ namespace Developer.MechanicalDrive
             GUILayout.Space(xOfset);
             if (GUILayout.Button("Start Engine"))
                 engine.Starting();
+
             if (GUILayout.Button("Stop Engine"))
                 engine.Stopping();
             GUILayout.EndHorizontal();

@@ -1,34 +1,28 @@
 /*************************************************************************
- *  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
- *  FileName: AnchorEditor.cs
- *  Author: Mogoson   Version: 1.0   Date: 7/3/2017
- *  Version Description:
- *    Internal develop version,mainly to achieve its function.
- *  File Description:
- *    Ignore.
- *  Class List:
- *    <ID>           <name>             <description>
- *     1.         AnchorEditor             Ignore.
- *  Function List:
- *    <class ID>     <name>             <description>
- *     1.
- *  History:
- *    <ID>    <author>      <time>      <version>      <description>
- *     1.     Mogoson     7/3/2017         1.0        Build this file.
+ *  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
+ *------------------------------------------------------------------------
+ *  File         :  AnchorEditor.cs
+ *  Description  :  Custom editor for chain anchor.
+ *------------------------------------------------------------------------
+ *  Author       :  Mogoson
+ *  Version      :  0.1.0
+ *  Date         :  7/3/2017
+ *  Description  :  Initial development version.
  *************************************************************************/
+
+using UnityEditor;
+using UnityEngine;
+
+#if UNITY_5_3_OR_NEWER
+using UnityEditor.SceneManagement;
+#endif
 
 namespace Developer.MechanicalDrive
 {
-    using UnityEditor;
-    using UnityEditor.SceneManagement;
-    using UnityEngine;
-
     public class AnchorEditor : EditorWindow
     {
         #region Property and Field
         protected static AnchorEditor instance;
-        public static bool isOpen { protected set; get; }
-
         protected static Vector2 scrollPos;
         protected const float leftAlign = 150;
         protected const float paragraph = 2.5f;
@@ -37,6 +31,12 @@ namespace Developer.MechanicalDrive
         protected static Material material;
         protected const string materialPath = "Assets/MGS-MechanicalDrive/Material/Anchor.mat";
 
+        protected static string prefix = "Anchor";
+        protected const string rendererName = "AnchorRenderer";
+        protected static float size = 0.05f;
+
+        public static bool isOpen { protected set; get; }
+
         public static Transform center { protected set; get; }
         public static float radius { protected set; get; }
         public static float from { protected set; get; }
@@ -44,10 +44,7 @@ namespace Developer.MechanicalDrive
         public static int countC { protected set; get; }
         public static bool isCircularSettingsReasonable
         {
-            get
-            {
-                return center && radius > 0 && from < to && countC > 0;
-            }
+            get { return center && radius > 0 && from < to && countC > 0; }
         }
 
         public static Transform start { protected set; get; }
@@ -55,15 +52,8 @@ namespace Developer.MechanicalDrive
         public static int countL { protected set; get; }
         public static bool isLinearSettingsReasonable
         {
-            get
-            {
-                return start && end && countL > 0;
-            }
+            get { return start && end && countL > 0; }
         }
-
-        protected static string prefix = "Anchor";
-        protected const string rendererName = "AnchorRenderer";
-        protected static float size = 0.05f;
         #endregion
 
         #region Private Method
@@ -78,9 +68,8 @@ namespace Developer.MechanicalDrive
         #region protected Method
         protected static void ShowEditorWindow()
         {
-            material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+            material = (Material)AssetDatabase.LoadAssetAtPath(materialPath, typeof(Material));
             instance = GetWindow<AnchorEditor>("Anchor Editor", true);
-            instance.autoRepaintOnSceneChange = true;
             instance.Show();
             isOpen = true;
         }
@@ -95,10 +84,7 @@ namespace Developer.MechanicalDrive
 
         protected virtual void OnSelectionChange()
         {
-            var chain = GetChainFromSelection();
-            if (targetChain == chain)
-                return;
-            targetChain = chain;
+            targetChain = GetChainFromSelection(); ;
             Repaint();
         }
 
@@ -120,7 +106,7 @@ namespace Developer.MechanicalDrive
                     to = EditorGUILayout.FloatField("To", to);
                     countC = EditorGUILayout.IntField("Count", countC);
                     if (EditorGUI.EndChangeCheck())
-                        ActiveSceneWindow();
+                        SceneView.RepaintAll();
 
                     GUILayout.BeginHorizontal();
                     GUILayout.Space(leftAlign);
@@ -146,7 +132,7 @@ namespace Developer.MechanicalDrive
                     end = (Transform)EditorGUILayout.ObjectField("End", end, typeof(Transform), true);
                     countL = EditorGUILayout.IntField("Count", countL);
                     if (EditorGUI.EndChangeCheck())
-                        ActiveSceneWindow();
+                        SceneView.RepaintAll();
 
                     GUILayout.BeginHorizontal();
                     GUILayout.Space(leftAlign);
@@ -203,6 +189,7 @@ namespace Developer.MechanicalDrive
                          "This operate will delete all of the chain anchors.\nAre you sure continue to do this?",
                          "Yes",
                          "Cancel");
+
                         if (delete)
                             DeleteAnchors();
                     }
@@ -222,14 +209,9 @@ namespace Developer.MechanicalDrive
 
         protected virtual void OnDestroy()
         {
-            ActiveSceneWindow();
             targetChain = null;
             isOpen = false;
-        }
-
-        protected void ActiveSceneWindow()
-        {
-            EditorApplication.ExecuteMenuItem("Window/Scene");
+            SceneView.RepaintAll();
         }
 
         protected void CreateCircularAnchors()
@@ -244,14 +226,14 @@ namespace Developer.MechanicalDrive
             }
             ResetCircularAnchorCreater();
             RefreshChainCurve();
-            EditorSceneManager.MarkAllScenesDirty();
+            MarkSceneDirty();
         }
 
         protected void ResetCircularAnchorCreater()
         {
             center = null;
             radius = from = to = countC = 0;
-            ActiveSceneWindow();
+            SceneView.RepaintAll();
         }
 
         protected void CreateLinearAnchors()
@@ -265,14 +247,14 @@ namespace Developer.MechanicalDrive
             }
             ResetLinearAnchorCreater();
             RefreshChainCurve();
-            EditorSceneManager.MarkAllScenesDirty();
+            MarkSceneDirty();
         }
 
         protected void ResetLinearAnchorCreater()
         {
             start = end = null;
             countL = 0;
-            ActiveSceneWindow();
+            SceneView.RepaintAll();
         }
 
         protected void CreateAnchor(string anchorName, Vector3 position, Vector3 lookAtPos, Vector3 worldUp, int siblingIndex)
@@ -297,7 +279,7 @@ namespace Developer.MechanicalDrive
             {
                 targetChain.anchorRoot.GetChild(i).name = prefix.Trim() + " (" + i + ")";
             }
-            EditorSceneManager.MarkAllScenesDirty();
+            MarkSceneDirty();
         }
 
         protected void AttachAnchorRenderer()
@@ -306,7 +288,7 @@ namespace Developer.MechanicalDrive
             {
                 AttachRenderer(anchor);
             }
-            EditorSceneManager.MarkAllScenesDirty();
+            MarkSceneDirty();
         }
 
         protected void AttachRenderer(Transform anchor)
@@ -325,11 +307,11 @@ namespace Developer.MechanicalDrive
         {
             foreach (Transform anchor in targetChain.anchorRoot)
             {
-                var renderer = anchor.FindChild(rendererName);
+                var renderer = anchor.Find(rendererName);
                 if (renderer)
                     DestroyImmediate(renderer.gameObject);
             }
-            EditorSceneManager.MarkAllScenesDirty();
+            MarkSceneDirty();
         }
 
         protected void DeleteAnchors()
@@ -338,7 +320,16 @@ namespace Developer.MechanicalDrive
             {
                 DestroyImmediate(targetChain.anchorRoot.GetChild(0).gameObject);
             }
+            MarkSceneDirty();
+        }
+
+        protected void MarkSceneDirty()
+        {
+#if UNITY_5_3_OR_NEWER
             EditorSceneManager.MarkAllScenesDirty();
+#else
+            EditorApplication.MarkSceneDirty();
+#endif
         }
         #endregion
 

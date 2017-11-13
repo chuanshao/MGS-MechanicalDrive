@@ -1,35 +1,29 @@
 /*************************************************************************
- *  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
- *  FileName: ChainEditor.cs
- *  Author: Mogoson   Version: 1.0   Date: 6/21/2017
- *  Version Description:
- *    Internal develop version,mainly to achieve its function.
- *  File Description:
- *    Ignore.
- *  Class List:
- *    <ID>           <name>             <description>
- *     1.         ChainEditor             Ignore.
- *  Function List:
- *    <class ID>     <name>             <description>
- *     1.
- *  History:
- *    <ID>    <author>      <time>      <version>      <description>
- *     1.     Mogoson     6/21/2017       1.0        Build this file.
+ *  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
+ *------------------------------------------------------------------------
+ *  File         :  ChainEditor.cs
+ *  Description  :  Custom editor for Chain.
+ *------------------------------------------------------------------------
+ *  Author       :  Mogoson
+ *  Version      :  0.1.0
+ *  Date         :  6/21/2017
+ *  Description  :  Initial development version.
  *************************************************************************/
+
+using System;
+using UnityEditor;
+using UnityEngine;
 
 namespace Developer.MechanicalDrive
 {
-    using System;
-    using UnityEditor;
-    using UnityEditor.SceneManagement;
-    using UnityEngine;
-
     [CustomEditor(typeof(Chain), true)]
     [CanEditMultipleObjects]
-    public class ChainEditor : MeEditor
+    public class ChainEditor : MechanismEditor
     {
         #region Property and Field
         protected Chain script { get { return target as Chain; } }
+
+        protected const float delta = 0.1f;
         #endregion
 
         #region Protected Method
@@ -52,11 +46,12 @@ namespace Developer.MechanicalDrive
         protected virtual void OnSceneGUI()
         {
             #region Coordinate System
+            Handles.color = blue;
+
             var horizontal = script.transform.right * lineLength;
             var vertical = script.transform.up * lineLength;
+            DrawSphereCap(script.transform.position, Quaternion.identity, nodeSize);
 
-            Handles.color = blue;
-            Handles.SphereCap(0, script.transform.position, Quaternion.identity, nodeSize);
             Handles.DrawLine(script.transform.position - horizontal, script.transform.position + horizontal);
             Handles.DrawLine(script.transform.position - vertical, script.transform.position + vertical);
             #endregion
@@ -66,16 +61,17 @@ namespace Developer.MechanicalDrive
             {
                 foreach (Transform anchor in script.anchorRoot)
                 {
-                    Handles.SphereCap(0, anchor.position, Quaternion.identity, nodeSize);
+                    DrawSphereCap(anchor.position, Quaternion.identity, nodeSize);
                 }
 
                 if (script.anchorRoot.childCount >= 2)
                 {
-                    var maxTimer = script.curve[script.curve.length - 1].time;
-                    for (float timer = 0; timer < maxTimer; timer += nodeSize)
+                    var maxTime = script.curve[script.curve.length - 1].time;
+                    for (float timer = 0; timer < maxTime; timer += delta)
                     {
-                        Handles.DrawLine(script.anchorRoot.TransformPoint(script.curve.Evaluate(timer)),
-                            script.anchorRoot.TransformPoint(script.curve.Evaluate(Mathf.Clamp(timer + nodeSize, 0, maxTimer))));
+                        var timerPoint = script.anchorRoot.TransformPoint(script.curve.Evaluate(timer));
+                        var deltaPoint = script.anchorRoot.TransformPoint(script.curve.Evaluate(Mathf.Clamp(timer + delta, 0, maxTime)));
+                        Handles.DrawLine(timerPoint, deltaPoint);
                     }
                 }
             }
@@ -118,7 +114,7 @@ namespace Developer.MechanicalDrive
                     Handles.DrawLine(AnchorEditor.start.position, AnchorEditor.end.position);
                     for (int i = 0; i < AnchorEditor.countL; i++)
                     {
-                        Handles.SphereCap(0, AnchorEditor.start.position + direction * space * (i + 1), Quaternion.identity, nodeSize);
+                        DrawSphereCap(AnchorEditor.start.position + direction * space * (i + 1), Quaternion.identity, nodeSize);
                     }
                 }
                 #endregion
@@ -129,7 +125,7 @@ namespace Developer.MechanicalDrive
         {
             var estimate = script.curve[script.curve.length - 1].time / script.space;
             script.count = (int)Math.Round(estimate, MidpointRounding.AwayFromZero);
-            EditorSceneManager.MarkAllScenesDirty();
+            MarkSceneDirty();
         }
 
         protected void DeleteNodes()
@@ -138,7 +134,7 @@ namespace Developer.MechanicalDrive
             {
                 DestroyImmediate(script.nodeRoot.GetChild(0).gameObject);
             }
-            EditorSceneManager.MarkAllScenesDirty();
+            MarkSceneDirty();
         }
         #endregion
 
@@ -146,10 +142,13 @@ namespace Developer.MechanicalDrive
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
+
             if (script.anchorRoot == null)
                 return;
+
             script.anchorRoot.localPosition = Vector3.zero;
             script.anchorRoot.localRotation = Quaternion.identity;
+
             if (GUILayout.Button("Anchor Editor"))
                 AnchorEditor.ShowEditor(script);
 
@@ -165,11 +164,13 @@ namespace Developer.MechanicalDrive
             GUILayout.BeginHorizontal("Node Editor", "Window", GUILayout.Height(45));
             if (GUILayout.Button("Estimate"))
                 EstimateCount();
+
             if (GUILayout.Button("Create"))
             {
                 DeleteNodes();
                 script.CreateNodes();
             }
+
             if (GUILayout.Button("Delete"))
                 DeleteNodes();
             GUILayout.EndHorizontal();

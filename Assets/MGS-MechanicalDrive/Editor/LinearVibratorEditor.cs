@@ -1,33 +1,27 @@
 /*************************************************************************
- *  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
- *  FileName: LinearVibratorEditor.cs
- *  Author: Mogoson   Version: 1.0   Date: 6/24/2017
- *  Version Description:
- *    Internal develop version,mainly to achieve its function.
- *  File Description:
- *    Ignore.
- *  Class List:
- *    <ID>           <name>             <description>
- *     1.      LinearVibratorEditor        Ignore.
- *  Function List:
- *    <class ID>     <name>             <description>
- *     1.
- *  History:
- *    <ID>    <author>      <time>      <version>      <description>
- *     1.     Mogoson     6/24/2017       1.0        Build this file.
+ *  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
+ *------------------------------------------------------------------------
+ *  File         :  LinearVibratorEditor.cs
+ *  Description  :  Custom editor for LinearVibrator.
+ *------------------------------------------------------------------------
+ *  Author       :  Mogoson
+ *  Version      :  0.1.0
+ *  Date         :  6/24/2017
+ *  Description  :  Initial development version.
  *************************************************************************/
+
+using UnityEditor;
+using UnityEngine;
 
 namespace Developer.MechanicalDrive
 {
-    using UnityEditor;
-    using UnityEngine;
-
     [CustomEditor(typeof(LinearVibrator), true)]
     [CanEditMultipleObjects]
-    public class LinearVibratorEditor : MeEditor
+    public class LinearVibratorEditor : MechanismEditor
     {
         #region Property and Field
         protected LinearVibrator script { get { return target as LinearVibrator; } }
+
         protected Vector3 startPosition
         {
             get
@@ -49,8 +43,9 @@ namespace Developer.MechanicalDrive
         protected virtual void OnSceneGUI()
         {
             Handles.color = blue;
-            Handles.SphereCap(0, startPosition, Quaternion.identity, nodeSize);
-            Handles.SphereCap(0, script.transform.position, Quaternion.identity, nodeSize);
+
+            DrawSphereCap(startPosition, Quaternion.identity, nodeSize);
+            DrawSphereCap(script.transform.position, Quaternion.identity, nodeSize);
 
             DrawArrow(startPosition, script.transform.forward, arrowLength, nodeSize, "Axis", blue);
             DrawArrow(startPosition, script.transform.forward, -script.amplitudeRadius, nodeSize, string.Empty, blue);
