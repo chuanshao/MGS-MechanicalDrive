@@ -1,18 +1,83 @@
 ==========================================================================
-  Copyright (C), 2017-2018, Mogoson tech. Co., Ltd.
+  Copyright (C), 2017-2018, Mogoson Tech. Co., Ltd.
   Name: MGS-MechanicalDrive
-  Author: Mogoson   Version: 1.0   Date: 6/24/2017
+  Author: Mogoson   Version: 0.1.0   Date: 11/14/2017
 ==========================================================================
-  [Summeray]
-    This package can be used to make mechanical drive in Unity3D scene.
+  [Summary]
+    Unity plugin for binding mechanical drive in scene.
+--------------------------------------------------------------------------
+  [Demand]
+    Binding Mesh Gear.
+    Binding proportional velocity mechanism.
+    Binding worm gear.
+    Binding belt flywheel.
+    Binding chain gear.
 --------------------------------------------------------------------------
   [Environment]
-    Package applies to Unity3D 5.0, .Net Framework 3.0 or above version.
+    Unity 5.0 or above.
+    .Net Framework 3.0 or above.
+--------------------------------------------------------------------------
+  [Achieve]
+    Gear : Rotate around Z axis.
+
+    Belt : Move texture UV on X axis.
+
+    Chain : Move and rotate base on anchor curve.
+
+    DynamicChain : Move and rotate base on dynamic anchor curve.
+
+    RollerChain : Constitute of rollers and chain piece, Move and rotate
+    base on anchor curve.
+
+    DynamicRollerChain : Constitute of rollers and chain piece, Move and
+    rotate base on dynamic anchor curve.
+
+    LinearVibrator : Reciprocating motion on Z axis.
+
+    CentrifugalVibrator : Eccentric motion around Z axis.
+
+    Synchronizer : All mechanisms of the synchronizer driven by same
+    velocity.
+
+    Transmission : All mechanisms of the Transmission driven by
+    proportional velocity.
+
+    WormGear : Worm gear mechanism.
+
+    Engine : Unified drive all mechanisms. 
+
+    Damper : Simulate engine startup acceleration and stop deceleration.
 --------------------------------------------------------------------------
   [Usage]
-    Find the demos in the path "MGS-MechanicalDrive/Scenes".
-    Understand the usages of component scripts in the demos.
-    Use the compnent scripts in your project.
+    Reference the prefabs and demos to binding mechanical drive in your
+    project and use the components.
+    
+    
+--------------------------------------------------------------------------
+  [Suggest]
+    The radius of gear should be set precisely.
+
+    UV of belt model should be transverse arrangement, the texture of
+    belt is preferably all sides continuous.
+
+    Make sure the gear engages perfectly with the worm when building
+    model.
+
+    Create smooth track anchors as much as possible, the "count" and
+    "space" of chain should be set reasonably.
+
+    The amplitude radius of CentrifugalVibrator or LinearVibrator
+    usually set a small value.
+--------------------------------------------------------------------------
+  [Demo]
+    Prefabs in the path "MGS-MechanicalDrive/Prefabs" provide reference
+    to you.
+
+    Demos in the path "MGS-MechanicalDrive/Scenes" provide reference to
+    you.
+--------------------------------------------------------------------------
+  [Resource]
+    https://github.com/mogoson/MGS-MechanicalDrive.
 --------------------------------------------------------------------------
   [Contact]
     If you have any questions, feel free to contact me at mogoson@qq.com.
