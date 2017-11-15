@@ -29,7 +29,7 @@ namespace Developer.MechanicalDrive
 
         protected static Chain targetChain;
         protected static Material material;
-        protected const string materialPath = "Assets/MGS-MechanicalDrive/Material/Anchor.mat";
+        protected const string materialPath = "Assets/MGS-MechanicalDrive/Materials/Anchor.mat";
 
         protected static string prefix = "Anchor";
         protected const string rendererName = "AnchorRenderer";
