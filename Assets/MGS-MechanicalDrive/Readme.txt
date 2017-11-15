@@ -52,7 +52,20 @@
     Reference the prefabs and demos to binding mechanical drive in your
     project and use the components.
     
-    
+    Use the Anchor Editor to help you create the anchors of chain.
+    Create a empty gameobject as chain root and attach the Chain
+    component.
+    Create a empty child gameobject of chain root as anchor root and
+    set it to "Anchor Root" parameter of Chain component.
+    Click the "Anchor Editor" button in Chain component Inspector to
+    open the editor window and use it to create chain anchors.
+
+    Use the Node Editor to help you create nodes of chain.
+    Create a empty child gameobject of chain root as node root and
+    set it to "Node Root" parameter of Chain component.
+    Set your prefab of node to "Node Prefab" parameter of Chain.
+    If you already create chain anchors, use the Node Editor in chain
+    component Inspector to create chain nodes.
 --------------------------------------------------------------------------
   [Suggest]
     The radius of gear should be set precisely.
