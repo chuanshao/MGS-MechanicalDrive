@@ -107,7 +107,7 @@ namespace Developer.MechanicalDrive
                 time += Vector3.Distance(anchorRoot.GetChild(i).position, anchorRoot.GetChild(i + 1).position);
             }
 
-            //Add last key and loop key[the first key].
+            //Add last key and loop key(the first key).
             curve.AddKey(time, anchorRoot.GetChild(anchorRoot.childCount - 1).localPosition);
             time += Vector3.Distance(anchorRoot.GetChild(anchorRoot.childCount - 1).position, anchorRoot.GetChild(0).position);
             curve.AddKey(time, anchorRoot.GetChild(0).localPosition);
