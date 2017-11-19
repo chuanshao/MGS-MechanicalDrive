@@ -80,13 +80,14 @@ namespace Developer.MechanicalDrive
         protected void TowNodeBaseOnCurve(Transform node, float time)
         {
             //Calculate position and direction.
-            var nodePos = curve.Evaluate(time);
-            var deltaPos = curve.Evaluate(time + delta);
-            var up = Vector3.Cross(deltaPos - nodePos, transform.forward);
+            var nodePos = anchorRoot.TransformPoint(curve.Evaluate(time));
+            var deltaPos = anchorRoot.TransformPoint(curve.Evaluate(time + delta));
+            var secant = (deltaPos - nodePos).normalized;
+            var worldUp = Vector3.Cross(secant, transform.forward);
 
             //Update position and direction.
-            node.localPosition = nodePos;
-            node.LookAt(nodeRoot.TransformPoint(deltaPos), up);
+            node.position = nodePos;
+            node.LookAt(deltaPos, worldUp);
         }
         #endregion
 
